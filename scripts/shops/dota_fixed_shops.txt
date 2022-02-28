@@ -15,6 +15,17 @@
 		"item"		"item_dust"	
 		"item"		"item_bottle"
 		"item"		"item_aghanims_shard"
+		"item"		"item_crack"
+		"item"		"item_cocain"
+		"item"		"item_weed"
+		"item"		"item_viagra"
+		"item"		"item_speed"
+		"item"		"item_meth"
+		"item"		"item_mushrooms"
+		"item"		"item_crocodile"
+		"item"		"item_chuck_noris"
+		"item"		"item_monster"
+		"item"		"item_blink_staff"
 	}
 
 	"attributes"

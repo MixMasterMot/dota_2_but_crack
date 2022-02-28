@@ -80,4 +80,850 @@
 		"ItemInitialStockTime"			"0"
 		"ItemInitialStockTimeTurbo"		"0"
 	}
+
+	//===============================================
+	// Make Bear
+	//===============================================
+	"item_make_bear"
+	{
+		"ID"  							"1251"
+		"BaseClass"						"item_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT"
+		"AbilityTextureName"			"item_rapier"
+		"ItemCost"						"0"	
+		"AbilityCastRange"				"400"
+		"AbilityCooldown"				"60"
+		"AbilityManaCost"				"0"
+		"ItemKillable"					"0"
+		"ItemSellable"					"0"
+		"ItemDroppable"					"1"
+				"ItemInitialCharges"		     	"1"
+		"OnSpellStart"
+		{
+			"SpendCharge"
+				{}
+			"SpawnUnit"
+			{
+				"Target"				"POINT"
+				"UnitName"				"npc_dota_lone_druid_bear1"
+				"UnitCount"             "1"
+			}
+		}
+	}
+	//===============================================
+	// It's crack
+	//===============================================
+	//bad batch reverse boosts
+
+	// attack boost
+	// damage user
+	"item_crack"{
+		"ID"  							"1252"
+		"BaseClass"						"item_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"item_rapier"
+		"AbilityCooldown"				"0"
+		"AbilityManaCost"				"0"
+
+		// Item Info
+		//-------------------------------------------------------------------------------------------------------------
+		"ItemCost"						"90"
+		"ItemShopTags"					"consumable"
+		"ItemQuality"					"consumable"
+		"ItemStackable"					"1"
+		"ItemPermanent"					"0"
+		"ItemInitialCharges"			"1"
+		"IsTempestDoubleClonable"		"0"
+		"ShouldBeInitiallySuggested"	"1"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"duration"                 "4.0"
+			}
+			"02"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"damage_boost"             "100"
+			}
+			"03"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"damage_tick"              "10"
+			}
+		}
+
+		"precache"
+		{
+			"soundfile" "soundevents/game_sounds_heroes/game_sounds_alchemist.vsndevts"
+			"particle"  "particles/status_fx/status_effect_chemical_rage.vpcf"
+			"particle"  "particles/units/heroes/hero_alchemist/alchemist_chemical_rage.vpcf"
+		}
+
+		"OnSpellStart"
+		{
+			"CreateThinker"
+			{
+				"ModifierName" "damage_caster_thinker"
+				"Target" "CASTER"
+			}
+
+			"ApplyModifier"
+			{
+				"ModifierName" "modifier_boost_damage"
+				"Target"       "CASTER"
+				"Duration"     "%duration"
+			}
+		}
+
+		"Modifiers"
+		{
+			
+			"damage_caster_thinker"
+			{
+				"IsDebuff" "1"
+				"ThinkInterval" "1.0"
+				"Duration"     "%duration"
+				"OnIntervalThink"
+				{
+					"Damage"
+					{
+						"Type"   "DAMAGE_TYPE_PHYSICAL"
+						"Damage" "%damage_tick"
+						"Target" "CASTER"
+					}
+				}
+				"OnDestroy"
+				{
+					"Damage"
+					{
+						"Type"   "DAMAGE_TYPE_PHYSICAL"
+						"Damage" "999999999"
+						"Target" "CASTER"
+					}
+				}
+			}
+
+			"modifier_boost_damage"
+			{
+				"IsBuff"   "1"
+				"Duration" "%duration"
+
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE" "%damage_boost"
+				}
+			}
+		}
+	}
+
+	// damage amp
+	"item_cocain"{
+		"ID"  							"1253"
+		"BaseClass"						"item_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"item_rapier"
+		"ItemCost"						"0"	
+		"AbilityCooldown"				"5"
+		"AbilityManaCost"				"0"
+		"ItemKillable"					"0"
+		"ItemSellable"					"0"
+		"ItemDroppable"					"1"
+		"ItemInitialCharges"		    "1"
+
+		"ItemShopTags"					"consumable"
+		"ItemQuality"					"consumable"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"duration"                 "15.0"
+			}
+			"02"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"bonus_attack_damage"      "50"
+			}
+		}
+
+		"precache"
+		{
+			"soundfile" "soundevents/game_sounds_heroes/game_sounds_alchemist.vsndevts"
+			"particle"  "particles/status_fx/status_effect_chemical_rage.vpcf"
+			"particle"  "particles/units/heroes/hero_alchemist/alchemist_chemical_rage.vpcf"
+		}
+
+		"OnSpellStart"
+		{
+			"FireSound"
+			{
+				"EffectName"   "Hero_Alchemist.ChemicalRage.Cast"
+				"Target"       "CASTER"
+			}
+
+			// Extra Modifier with what we need to add for the custom ability 
+			"ApplyModifier"
+			{
+				"ModifierName" "modifier_cocain"
+				"Target"       "CASTER"
+			}
+		}
+
+		"Modifiers"
+		{
+			
+			"modifier_cocain"
+			{
+				"IsBuff"   "1"
+				"Duration" "%duration"
+
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_BASEATTACK_BONUSDAMAGE" "%bonus_attack_damage"
+				}
+			}
+		}
+	}
+
+	// gives evasion
+	// slow enemy
+	// drains mana
+	"item_weed"{
+		"ID"  							"1254"
+		"BaseClass"						"item_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityCastAnimation"          "ACT_DOTA_ALCHEMIST_CHEMICAL_RAGE_START"
+		"AbilityTextureName"			"item_rapier"
+		"ItemCost"						"0"	
+		"AbilityCastRange"				"400"
+		"AbilityCooldown"				"5"
+		"AbilityManaCost"				"0"
+		"ItemKillable"					"0"
+		"ItemSellable"					"0"
+		"ItemDroppable"					"1"
+		"ItemInitialCharges"		    "1"
+
+		"ItemShopTags"					"consumable"
+		"ItemQuality"					"consumable"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"duration"                 "15.0"
+			}
+			"02"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"bonus_evasion"      	   "50"
+			}
+		}
+
+		"OnSpellStart"
+		{
+			"ApplyModifier"
+			{
+				"ModifierName" "modifier_weed"
+				"Target"       "CASTER"
+			}
+		}
+
+		"Modifiers"
+		{
+			"modifier_weed"
+			{
+				"IsBuff"   "1"
+				"Duration" "%duration"
+
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_EVASION_CONSTANT" "%bonus_evasion"
+				}
+			}
+		}
+	}
+
+	// gives bonus str
+	"item_viagra"{
+		"ID"  							"1255"
+		"BaseClass"						"item_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityCastAnimation"          "ACT_DOTA_ALCHEMIST_CHEMICAL_RAGE_START"
+		"AbilityTextureName"			"item_rapier"
+		"ItemCost"						"0"	
+		"AbilityCastRange"				"400"
+		"AbilityCooldown"				"60"
+		"AbilityManaCost"				"0"
+		"ItemKillable"					"0"
+		"ItemSellable"					"0"
+		"ItemDroppable"					"1"
+		"ItemInitialCharges"		    "1"
+
+		"ItemShopTags"					"consumable"
+		"ItemQuality"					"consumable"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"duration"                 "15.0"
+			}
+			"02"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"bonus_str"      		   "50.0"
+			}
+		}
+
+		"precache"
+		{
+			"soundfile" "soundevents/game_sounds_heroes/game_sounds_alchemist.vsndevts"
+			"particle"  "particles/status_fx/status_effect_chemical_rage.vpcf"
+			"particle"  "particles/units/heroes/hero_alchemist/alchemist_chemical_rage.vpcf"
+		}
+
+		"OnSpellStart"
+		{
+			// Extra Modifier with what we need to add for the custom ability 
+			"ApplyModifier"
+			{
+				"ModifierName" "modifier_viagra"
+				"Target"       "CASTER"
+			}
+		}
+
+		"Modifiers"
+		{
+			
+			"modifier_viagra"
+			{
+				"IsBuff"   "1"
+				"Duration" "%duration"
+
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_STATS_STRENGTH_BONUS" "%bonus_str"
+				}
+			}
+		}
+	}
+
+	// bonus movenent speed
+	"item_speed"{
+		"ID"  							"1256"
+		"BaseClass"						"item_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityCastAnimation"          "ACT_DOTA_ALCHEMIST_CHEMICAL_RAGE_START"
+		"AbilityTextureName"			"item_rapier"
+		"ItemCost"						"0"	
+		"AbilityCastRange"				"400"
+		"AbilityCooldown"				"60"
+		"AbilityManaCost"				"0"
+		"ItemKillable"					"0"
+		"ItemSellable"					"0"
+		"ItemDroppable"					"1"
+		"ItemInitialCharges"		    "1"
+
+		"ItemShopTags"					"consumable"
+		"ItemQuality"					"consumable"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"duration"                 "15.0"
+			}
+			"02"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"bonus_ms"                 "250"
+			}
+		}
+
+		"OnSpellStart"
+		{
+			// Extra Modifier with what we need to add for the custom ability 
+			"ApplyModifier"
+			{
+				"ModifierName" "modifier_kek"
+				"Target"       "CASTER"
+			}
+		}
+
+		"Modifiers"
+		{
+			
+			"modifier_kek"
+			{
+				"IsBuff"   "1"
+				"Duration" "%duration"
+
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_MOVESPEED_BONUS_CONSTANT" "%bonus_ms"
+					"MODIFIER_PROPERTY_MOVESPEED_MAX"            "555555"
+				}
+			}
+		}
+	}
+
+	// bouns boost str, agi
+	// on expire 50 hp loss ps for 120s if not buy new meth 
+	// price increase ?
+	"item_meth"{
+		"ID"  							"1257"
+		"BaseClass"						"item_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityCastAnimation"          "ACT_DOTA_ALCHEMIST_CHEMICAL_RAGE_START"
+		"AbilityTextureName"			"item_rapier"
+		"ItemCost"						"50"	
+		"AbilityCastRange"				"400"
+		"AbilityCooldown"				"60"
+		"AbilityManaCost"				"0"
+		"ItemKillable"					"0"
+		"ItemSellable"					"0"
+		"ItemDroppable"					"1"
+		"ItemInitialCharges"		    "1"
+
+		"ItemShopTags"					"consumable"
+		"ItemQuality"					"consumable"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"duration"                 "10.0"
+			}
+			"02"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"bonus_str"    			   "50"
+			}
+			"03"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"bonus_agi"                "50"
+			}
+			"04"
+			{
+				"var_type"                  "FIELD_FLOAT"
+				"damage_tick"                "50"
+			}
+			"05"
+			{
+				"var_type"                  "FIELD_FLOAT"
+				"duration_expire"                "-1.0"
+			}
+		}
+
+		"precache"
+		{
+			"soundfile" "soundevents/game_sounds_heroes/game_sounds_alchemist.vsndevts"
+			"particle"  "particles/status_fx/status_effect_chemical_rage.vpcf"
+			"particle"  "particles/units/heroes/hero_alchemist/alchemist_chemical_rage.vpcf"
+		}
+
+		"OnSpellStart"
+		{
+			// Extra Modifier with what we need to add for the custom ability 
+			"ApplyModifier"
+			{
+				"ModifierName" "modifier_meth"
+				"Target"       "CASTER"
+			}
+		}
+
+		"Modifiers"
+		{
+			
+			"modifier_meth"
+			{
+				"IsBuff"   "0"
+				"IsHidden" "1"
+				"Duration" "%duration"
+
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_STATS_STRENGTH_BONUS" "%bonus_str"
+					"MODIFIER_PROPERTY_STATS_AGILITY_BONUS" "%bonus_agi"
+				}
+
+				"OnDestroy"
+				{
+					"ApplyModifier"
+					{
+						"ModifierName" "modifier_meth_expire"
+						"Target"       "CASTER"
+					}
+				}
+			}
+
+			"modifier_meth_expire"
+			{
+				"IsDebuff" "1"
+				"ThinkInterval" "1.0"
+				"Duration"     "%duration_expire"
+				"OnIntervalThink"
+				{
+					"Damage"
+					{
+						"Type"   "DAMAGE_TYPE_PHYSICAL"
+						"Damage" "%damage_tick"
+						"Target" "CASTER"
+					}
+				}
+			}
+		}
+	}
+
+	// turn other heros into dragon
+	// bonuses in river
+	"item_mushrooms"{
+		"ID"  							"1258"
+		"BaseClass"						"item_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityCastAnimation"          "ACT_DOTA_ALCHEMIST_CHEMICAL_RAGE_START"
+		"AbilityTextureName"			"item_rapier"
+		"ItemCost"						"0"	
+		"AbilityCastRange"				"400"
+		"AbilityCooldown"				"60"
+		"AbilityManaCost"				"0"
+		"ItemKillable"					"0"
+		"ItemSellable"					"0"
+		"ItemDroppable"					"1"
+		"ItemInitialCharges"		    "1"
+
+		"ItemShopTags"					"consumable"
+		"ItemQuality"					"consumable"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"duration"                 "15.0"
+			}
+			"02"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"transformation_time"      "0.35"
+			}
+			"03"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"bonus_movespeed_percent"  "5800"
+			}
+			"04"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"bonus_attack_speed"       "5000"
+			}
+			"05"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"hp_regen"				   "100"
+			}
+		}
+
+		"precache"
+		{
+			"soundfile" "soundevents/game_sounds_heroes/game_sounds_alchemist.vsndevts"
+			"particle"  "particles/status_fx/status_effect_chemical_rage.vpcf"
+			"particle"  "particles/units/heroes/hero_alchemist/alchemist_chemical_rage.vpcf"
+		}
+
+		"OnSpellStart"
+		{
+			"FireSound"
+			{
+				"EffectName"   "Hero_Alchemist.ChemicalRage.Cast"
+				"Target"       "CASTER"
+			}
+
+			"ApplyModifier"
+			{
+				"ModifierName" "modifier_alchemist_chemical_rage_transform"
+				"Target"       "CASTER"
+				"Duration"     "%transformation_time"
+			}
+
+			// Extra Modifier with what we need to add for the custom ability 
+			"ApplyModifier"
+			{
+				"ModifierName" "modifier_kek"
+				"Target"       "CASTER"
+			}
+		}
+
+		"Modifiers"
+		{
+			
+			"modifier_kek"
+			{
+				"IsBuff"   "0"
+				"IsHidden" "1"
+				"Duration" "%duration"
+
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT" "%bonus_attack_speed"
+					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%bonus_movespeed_percent"
+					"MODIFIER_PROPERTY_HEALTH_REGEN_CONSTANT" "%hp_regen"
+				}
+			}
+		}
+	}
+
+	// summon a unit chance of being angry neutral creep
+	"item_crocodile"{
+		"ID"  							"1259"
+		"BaseClass"						"item_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityCastAnimation"          "ACT_DOTA_ALCHEMIST_CHEMICAL_RAGE_START"
+		"AbilityTextureName"			"item_rapier"
+		"ItemCost"						"0"	
+		"AbilityCastRange"				"400"
+		"AbilityCooldown"				"60"
+		"AbilityManaCost"				"0"
+		"ItemKillable"					"0"
+		"ItemSellable"					"0"
+		"ItemDroppable"					"1"
+		"ItemInitialCharges"		    "1"
+
+		"ItemShopTags"					"consumable"
+		"ItemQuality"					"consumable"
+
+		"OnSpellStart"
+		{
+			"SpendCharge"
+				{}
+			"SpawnUnit"
+			{
+				"Target"				"CASTER"
+				"UnitName"				"npc_dota_roshan"
+				"UnitCount"             "1"
+			}
+		}
+	}
+
+	// bonus dmg for 1 hit
+	"item_chuck_noris"{
+		"ID"  							"1260"
+		"BaseClass"						"item_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityCastAnimation"          "ACT_DOTA_ALCHEMIST_CHEMICAL_RAGE_START"
+		"AbilityTextureName"			"item_rapier"
+		"ItemCost"						"0"	
+		"AbilityCastRange"				"400"
+		"AbilityCooldown"				"60"
+		"AbilityManaCost"				"0"
+		"ItemKillable"					"0"
+		"ItemSellable"					"0"
+		"ItemDroppable"					"1"
+		"ItemInitialCharges"		    "1"
+
+		"ItemShopTags"					"consumable"
+		"ItemQuality"					"consumable"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"duration"                 "15.0"
+			}
+			"02"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"transformation_time"      "0.35"
+			}
+			"03"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"bonus_movespeed_percent"  "5800"
+			}
+			"04"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"bonus_attack_speed"       "5000"
+			}
+			"05"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"hp_regen"				   "100"
+			}
+		}
+
+		"precache"
+		{
+			"soundfile" "soundevents/game_sounds_heroes/game_sounds_alchemist.vsndevts"
+			"particle"  "particles/status_fx/status_effect_chemical_rage.vpcf"
+			"particle"  "particles/units/heroes/hero_alchemist/alchemist_chemical_rage.vpcf"
+		}
+
+		"OnSpellStart"
+		{
+			"FireSound"
+			{
+				"EffectName"   "Hero_Alchemist.ChemicalRage.Cast"
+				"Target"       "CASTER"
+			}
+
+			"ApplyModifier"
+			{
+				"ModifierName" "modifier_alchemist_chemical_rage_transform"
+				"Target"       "CASTER"
+				"Duration"     "%transformation_time"
+			}
+
+			// Extra Modifier with what we need to add for the custom ability 
+			"ApplyModifier"
+			{
+				"ModifierName" "modifier_kek"
+				"Target"       "CASTER"
+			}
+		}
+
+		"Modifiers"
+		{
+			
+			"modifier_kek"
+			{
+				"IsBuff"   "0"
+				"IsHidden" "1"
+				"Duration" "%duration"
+
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT" "%bonus_attack_speed"
+					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%bonus_movespeed_percent"
+					"MODIFIER_PROPERTY_HEALTH_REGEN_CONSTANT" "%hp_regen"
+				}
+			}
+		}
+	}
+
+	// dispell enemy drugs
+	// apply withdrawl simptoms
+	"item_monster"{
+		"ID"  							"1261"
+		"BaseClass"						"item_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityCastAnimation"          "ACT_DOTA_ALCHEMIST_CHEMICAL_RAGE_START"
+		"AbilityTextureName"			"item_rapier"
+		"ItemCost"						"0"	
+		"AbilityCastRange"				"400"
+		"AbilityCooldown"				"60"
+		"AbilityManaCost"				"0"
+		"ItemKillable"					"0"
+		"ItemSellable"					"0"
+		"ItemDroppable"					"1"
+		"ItemInitialCharges"		    "1"
+
+		"ItemShopTags"					"consumable"
+		"ItemQuality"					"consumable"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"duration"                 "15.0"
+			}
+			"02"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"transformation_time"      "0.35"
+			}
+			"03"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"bonus_movespeed_percent"  "5800"
+			}
+			"04"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"bonus_attack_speed"       "5000"
+			}
+			"05"
+			{
+				"var_type"                 "FIELD_FLOAT"
+				"hp_regen"				   "100"
+			}
+		}
+
+		"precache"
+		{
+			"soundfile" "soundevents/game_sounds_heroes/game_sounds_alchemist.vsndevts"
+			"particle"  "particles/status_fx/status_effect_chemical_rage.vpcf"
+			"particle"  "particles/units/heroes/hero_alchemist/alchemist_chemical_rage.vpcf"
+		}
+
+		"OnSpellStart"
+		{
+			"FireSound"
+			{
+				"EffectName"   "Hero_Alchemist.ChemicalRage.Cast"
+				"Target"       "CASTER"
+			}
+
+			"ApplyModifier"
+			{
+				"ModifierName" "modifier_alchemist_chemical_rage_transform"
+				"Target"       "CASTER"
+				"Duration"     "%transformation_time"
+			}
+
+			// Extra Modifier with what we need to add for the custom ability 
+			"ApplyModifier"
+			{
+				"ModifierName" "modifier_kek"
+				"Target"       "CASTER"
+			}
+		}
+
+		"Modifiers"
+		{
+			
+			"modifier_kek"
+			{
+				"IsBuff"   "0"
+				"IsHidden" "1"
+				"Duration" "%duration"
+
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT" "%bonus_attack_speed"
+					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%bonus_movespeed_percent"
+					"MODIFIER_PROPERTY_HEALTH_REGEN_CONSTANT" "%hp_regen"
+				}
+			}
+		}
+	}
+
+	"item_blink_staff"
+    {
+        "ID"                            "1300" // anything above 1250 should be safe to use.
+        "BaseClass"                     "item_lua"
+		"AbilityTextureName"            "item_blink_staff"
+		"ScriptFile"                    "lua_items/blink_staff/blink_staff.lua"
+		
+		"ItemShopTags"					"consumable"
+		"ItemQuality"					"consumable"
+
+		// Casting
+        //--------------------------------------------
+        "AbilityCastRange"              "0" //We could define limit here but blink dagger has unlimited range to let player use it more efficiently. The range limiting comes in the script. 0 means unlimited.
+        "AbilityCastPoint"              "0.3" //It's the wind up time of spell.
+        "AbilityCooldown"               "10.0"
+        "AbilityManaCost"               "50"
+    }
 }
